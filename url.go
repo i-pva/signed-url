@@ -1,13 +1,14 @@
 package go_url
 
 import (
+	"fmt"
 	"net/url"
 	"strconv"
 	"time"
 )
 
 type Url struct {
-	url.URL
+	Path string
 	url.Values
 }
 
@@ -24,20 +25,26 @@ func (u *Url) TemporarySigned(expiration time.Duration) string {
 func (u *Url) sign(expiration time.Duration) string {
 	if expiration != 0 {
 		delay := time.Now().Add(expiration).Unix()
-		u.setQueryParameter("expires", strconv.Itoa(int(delay)))
+		u.Set("expires", strconv.Itoa(int(delay)))
 	}
-	u.setQueryParameter("signature", hash([]byte(u.String())))
+	u.Set("signature", hash([]byte(u.String())))
 	return u.String()
 }
 
-func (u *Url) SetQueryParameter(key, value string) {
-	u.setQueryParameter(key, value)
-}
-
-func (u *Url) setQueryParameter(key, value string) {
+func (u *Url) Set(key, value string) {
 	if u.Values == nil {
 		u.Values = url.Values{}
 	}
 	u.Values.Set(key, value)
-	u.RawQuery = u.Values.Encode()
+}
+
+func (u *Url) Add(key, value string) {
+	if u.Values == nil {
+		u.Values = url.Values{}
+	}
+	u.Values.Add(key, value)
+}
+
+func (u *Url) String() string {
+	return fmt.Sprintf("%s?%s", u.Path, u.Values.Encode())
 }
