@@ -24,14 +24,17 @@ func (u *Url) TemporarySigned(expiration time.Duration) string {
 func (u *Url) sign(expiration time.Duration) string {
 	if expiration != 0 {
 		delay := time.Now().Add(expiration).Unix()
-		u.Values.Set("expires", strconv.Itoa(int(delay)))
+		u.setQueryParameter("expires", strconv.Itoa(int(delay)))
 	}
-	u.Values.Set("signature", hash([]byte(u.String())))
-	u.RawQuery = u.Values.Encode()
+	u.setQueryParameter("signature", hash([]byte(u.String())))
 	return u.String()
 }
 
 func (u *Url) SetQueryParameter(key, value string) {
+	u.setQueryParameter(key, value)
+}
+
+func (u *Url) setQueryParameter(key, value string) {
 	if u.Values == nil {
 		u.Values = url.Values{}
 	}
