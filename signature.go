@@ -1,4 +1,4 @@
-package go_url
+package url
 
 import (
 	"crypto/hmac"

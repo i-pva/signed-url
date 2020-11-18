@@ -1,50 +1,53 @@
-package go_url
+package url
 
 import (
-	"fmt"
+	"errors"
 	"net/url"
 	"strconv"
 	"time"
 )
 
-type Url struct {
-	Path string
-	url.Values
-}
-
 // Create a signed url URL for a path route.
-func (u *Url) Signed() string {
-	return u.sign(0)
+func Signed(rawurl string) (string, error) {
+	return sign(rawurl, 0)
 }
 
 // Create a temporary signed url URL for a path route.
-func (u *Url) TemporarySigned(expiration time.Duration) string {
-	return u.sign(expiration)
+func TemporarySigned(rawurl string, expiration time.Duration) (string, error) {
+	return sign(rawurl, expiration)
 }
 
-func (u *Url) sign(expiration time.Duration) string {
+func hasValidSignature() bool {
+	return false
+}
+
+func hasCorrectSignature() bool {
+	return false
+}
+
+func signatureHasNotExpired() bool {
+	return false
+}
+
+func sign(rawurl string, expiration time.Duration) (string, error) {
+	u, err := url.Parse(rawurl)
+	if err != nil {
+		return rawurl, err
+	}
+
+	values := u.Query()
+
+	signature := values.Get("signature")
+	if len(signature) != 0 {
+		return rawurl, errors.New("'signature' is a reserved parameter when generating signed url. Please rename your url parameter")
+	}
+
 	if expiration != 0 {
 		delay := time.Now().Add(expiration).Unix()
-		u.Set("expires", strconv.Itoa(int(delay)))
+		values.Set("expires", strconv.Itoa(int(delay)))
 	}
-	u.Set("signature", hash([]byte(u.String())))
-	return u.String()
-}
+	values.Set("signature", hash([]byte(u.String())))
 
-func (u *Url) Set(key, value string) {
-	if u.Values == nil {
-		u.Values = url.Values{}
-	}
-	u.Values.Set(key, value)
-}
-
-func (u *Url) Add(key, value string) {
-	if u.Values == nil {
-		u.Values = url.Values{}
-	}
-	u.Values.Add(key, value)
-}
-
-func (u *Url) String() string {
-	return fmt.Sprintf("%s?%s", u.Path, u.Values.Encode())
+	u.RawQuery = values.Encode()
+	return u.String(), nil
 }
