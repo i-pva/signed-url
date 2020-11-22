@@ -7,39 +7,24 @@ import (
 	"time"
 )
 
-// Create a signed url URL for a path route.
-func Signed(rawurl string) (string, error) {
-	return sign(rawurl, 0)
+// Create a signed url URL.
+func Signed(u *url.URL) (*url.URL, error) {
+	return sign(u, 0)
 }
 
-// Create a temporary signed url URL for a path route.
-func TemporarySigned(rawurl string, expiration time.Duration) (string, error) {
-	return sign(rawurl, expiration)
+// Create a temporary signed url URL.
+func TemporarySigned(u *url.URL, expiration time.Duration) (*url.URL, error) {
+	return sign(u, expiration)
 }
 
-func hasValidSignature() bool {
-	return false
-}
-
-func hasCorrectSignature() bool {
-	return false
-}
-
-func signatureHasNotExpired() bool {
-	return false
-}
-
-func sign(rawurl string, expiration time.Duration) (string, error) {
-	u, err := url.Parse(rawurl)
-	if err != nil {
-		return rawurl, err
-	}
+// Sing given url
+func sign(u *url.URL, expiration time.Duration) (*url.URL, error) {
 
 	values := u.Query()
 
 	signature := values.Get("signature")
 	if len(signature) != 0 {
-		return rawurl, errors.New("'signature' is a reserved parameter when generating signed url. Please rename your url parameter")
+		return u, errors.New("'signature' is a reserved parameter when generating signed url. Please rename your url parameter")
 	}
 
 	if expiration != 0 {
@@ -49,5 +34,5 @@ func sign(rawurl string, expiration time.Duration) (string, error) {
 	values.Set("signature", hash([]byte(u.String())))
 
 	u.RawQuery = values.Encode()
-	return u.String(), nil
+	return u, nil
 }
