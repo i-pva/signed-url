@@ -30,6 +30,7 @@ func sign(u *url.URL, expiration time.Duration) (*url.URL, error) {
 	if expiration != 0 {
 		delay := time.Now().Add(expiration).Unix()
 		values.Set("expires", strconv.Itoa(int(delay)))
+		u.RawQuery = values.Encode()
 	}
 	values.Set("signature", hash([]byte(u.String())))
 

@@ -9,10 +9,10 @@ import (
 	"time"
 )
 
-var Key []byte
+var SecretKey []byte
 
 // Determine if the given request has a valid signature.
-func HasValidSignature(request *http.Request) bool {
+func HasValidURL(request *http.Request) bool {
 	return hasCorrectSignature(request) && signatureHasNotExpired(request)
 }
 
@@ -42,7 +42,7 @@ func signatureHasNotExpired(request *http.Request) bool {
 
 // hash for generate signature from given url
 func hash(url []byte) string {
-	mac := hmac.New(sha256.New, Key)
+	mac := hmac.New(sha256.New, SecretKey)
 	mac.Write(url)
 	byteArray := mac.Sum(nil)
 

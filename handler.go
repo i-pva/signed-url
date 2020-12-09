@@ -10,7 +10,7 @@ var ErrInvalidSignature = errors.New("invalid signature")
 // Handler verify the url from given request, and return error as necessary.
 func Handler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		if HasValidSignature(request) {
+		if HasValidURL(request) {
 			h.ServeHTTP(writer, request)
 			return
 		}
