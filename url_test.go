@@ -14,6 +14,8 @@ func Test_InValid_HasValidURL(t *testing.T) {
 		Path:   "path",
 	}
 
+	SecretKey = []byte("secret-key")
+
 	v := url.Values{}
 	v.Add("expires", "4494900544")
 	v.Add("signature", "41d5c3a92c6ef94e80cb70c7dcda0859")
@@ -32,6 +34,8 @@ func Test_Valid_HasValidURL_With_Signed(t *testing.T) {
 		Path:   "path",
 	}
 
+	SecretKey = []byte("secret-key")
+
 	u, err := Signed(u)
 	if err != nil {
 		t.Errorf("Signed() error = %v", err)
@@ -49,6 +53,8 @@ func Test_Valid_HasValidURL_With_TemporarySigned(t *testing.T) {
 		Path:   "path",
 	}
 
+	SecretKey = []byte("secret-key")
+
 	u, err := TemporarySigned(u, 1*time.Hour)
 	if err != nil {
 		t.Errorf("TemporarySigned() error = %v", err)
@@ -65,6 +71,8 @@ func Test_InValid_HasValidURL_With_TemporarySigned(t *testing.T) {
 		Host:   "test.com",
 		Path:   "path",
 	}
+
+	SecretKey = []byte("secret-key")
 
 	u, err := TemporarySigned(u, -1*time.Hour)
 	if err != nil {
