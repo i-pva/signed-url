@@ -27,7 +27,7 @@ func Test_InValid_HasValidURL(t *testing.T) {
 	}
 }
 
-func Test_Valid_HasValidURL_With_Signed(t *testing.T) {
+func Test_Valid_HasValidURL_With_Sign(t *testing.T) {
 	u := &url.URL{
 		Scheme: "http",
 		Host:   "test.com",
@@ -36,7 +36,7 @@ func Test_Valid_HasValidURL_With_Signed(t *testing.T) {
 
 	SecretKey = []byte("secret-key")
 
-	u, err := Signed(u)
+	u, err := Sign(u)
 	if err != nil {
 		t.Errorf("Signed() error = %v", err)
 	}
@@ -46,7 +46,7 @@ func Test_Valid_HasValidURL_With_Signed(t *testing.T) {
 	}
 }
 
-func Test_Valid_HasValidURL_With_TemporarySigned(t *testing.T) {
+func Test_Valid_HasValidURL_With_SignTemporary(t *testing.T) {
 	u := &url.URL{
 		Scheme: "http",
 		Host:   "test.com",
@@ -55,7 +55,7 @@ func Test_Valid_HasValidURL_With_TemporarySigned(t *testing.T) {
 
 	SecretKey = []byte("secret-key")
 
-	u, err := TemporarySigned(u, 1*time.Hour)
+	u, err := SignTemporary(u, 1*time.Hour)
 	if err != nil {
 		t.Errorf("TemporarySigned() error = %v", err)
 	}
@@ -65,7 +65,7 @@ func Test_Valid_HasValidURL_With_TemporarySigned(t *testing.T) {
 	}
 }
 
-func Test_InValid_HasValidURL_With_TemporarySigned(t *testing.T) {
+func Test_InValid_HasValidURL_With_SignTemporary(t *testing.T) {
 	u := &url.URL{
 		Scheme: "http",
 		Host:   "test.com",
@@ -74,7 +74,7 @@ func Test_InValid_HasValidURL_With_TemporarySigned(t *testing.T) {
 
 	SecretKey = []byte("secret-key")
 
-	u, err := TemporarySigned(u, -1*time.Hour)
+	u, err := SignTemporary(u, -1*time.Hour)
 	if err != nil {
 		t.Errorf("TemporarySigned() error = %v", err)
 	}

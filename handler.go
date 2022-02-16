@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// ErrInvalidSignature represents a failure invalid signature.
 var ErrInvalidSignature = errors.New("invalid signature")
 
 // Handler verify the url from given request, and return error as necessary.

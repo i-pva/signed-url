@@ -7,24 +7,26 @@ import (
 	"time"
 )
 
-// Create a signed url URL.
-func Signed(u *url.URL) (*url.URL, error) {
+// ErrSignatureExists represents a failure when signature already exists in url.
+var ErrSignatureExists = errors.New("'signature' is a reserved parameter when generating signed url. Please rename your url parameter")
+
+// Sign sings the given url and returns a signed url with error.
+func Sign(u *url.URL) (*url.URL, error) {
 	return sign(u, 0)
 }
 
-// Create a temporary signed url URL.
-func TemporarySigned(u *url.URL, expiration time.Duration) (*url.URL, error) {
+// SignTemporary sings the given url with expiration and returns a signed url with error.
+func SignTemporary(u *url.URL, expiration time.Duration) (*url.URL, error) {
 	return sign(u, expiration)
 }
 
-// Sing given url
 func sign(u *url.URL, expiration time.Duration) (*url.URL, error) {
 
 	values := u.Query()
 
 	signature := values.Get("signature")
 	if len(signature) != 0 {
-		return u, errors.New("'signature' is a reserved parameter when generating signed url. Please rename your url parameter")
+		return u, ErrSignatureExists
 	}
 
 	if expiration != 0 {

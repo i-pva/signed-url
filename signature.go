@@ -9,14 +9,15 @@ import (
 	"time"
 )
 
+// SecretKey represents a key for hash function.
 var SecretKey []byte
 
-// Determine if the given request has a valid signature.
+// HasValidURL determines if the given request has a valid signature.
 func HasValidURL(request *http.Request) bool {
 	return hasCorrectSignature(request) && signatureHasNotExpired(request)
 }
 
-// Determine if the signature from the given request matches the URL.
+// hasCorrectSignature determines if the signature from the given request matches the URL.
 func hasCorrectSignature(request *http.Request) bool {
 	url := request.URL
 
@@ -28,7 +29,7 @@ func hasCorrectSignature(request *http.Request) bool {
 	return signature == hash([]byte(url.String()))
 }
 
-// Determine if the expires timestamp from the given request is not from the past.
+// signatureHasNotExpired determine if the expires timestamp from the given request is not from the past.
 func signatureHasNotExpired(request *http.Request) bool {
 	url := request.URL
 	expires := url.Query().Get("expires")
