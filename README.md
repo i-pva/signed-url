@@ -38,7 +38,7 @@ func main(){
 
 	//URL Signing
 
-	signedUrl , err := surl.Signed(u)
+	signedUrl , err := surl.Sign(u)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -59,7 +59,7 @@ func main(){
 # URLs Signing with a limited lifetime  
 
 ```go
-signedUrl , err := url.TemporarySigned(u, 1 * time.Hour) // will be valid for 1 hour
+signedUrl , err := url.SignTemporary(u, 1 * time.Hour) // will be valid for 1 hour
 if err != nil {
      return err
 }
