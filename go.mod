@@ -1,4 +1,4 @@
 module github.com/i-pva/signed-url
 
-go 1.17
+go 1.20
 
