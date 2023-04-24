@@ -10,7 +10,11 @@ import (
 )
 
 // SecretKey represents a key for hash function.
-var SecretKey []byte
+var secretKey []byte
+
+func SetSecretKey(key []byte) {
+	secretKey = key
+}
 
 // HasValidURL determines if the given request has a valid signature.
 func HasValidURL(request *http.Request) bool {
@@ -43,7 +47,7 @@ func signatureHasNotExpired(request *http.Request) bool {
 
 // hash for generate signature from given url
 func hash(url []byte) string {
-	mac := hmac.New(sha256.New, SecretKey)
+	mac := hmac.New(sha256.New, secretKey)
 	mac.Write(url)
 	byteArray := mac.Sum(nil)
 
