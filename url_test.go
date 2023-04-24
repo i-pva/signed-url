@@ -7,14 +7,16 @@ import (
 	"time"
 )
 
+func init() {
+	secretKey = []byte("secret-key")
+}
+
 func Test_InValid_HasValidURL(t *testing.T) {
 	u := &url.URL{
 		Scheme: "http",
 		Host:   "test.com",
 		Path:   "path",
 	}
-
-	SecretKey = []byte("secret-key")
 
 	v := url.Values{}
 	v.Add("expires", "4494900544")
@@ -34,8 +36,6 @@ func Test_Valid_HasValidURL_With_Sign(t *testing.T) {
 		Path:   "path",
 	}
 
-	SecretKey = []byte("secret-key")
-
 	u, err := Sign(u)
 	if err != nil {
 		t.Errorf("Signed() error = %v", err)
@@ -53,8 +53,6 @@ func Test_Valid_HasValidURL_With_SignTemporary(t *testing.T) {
 		Path:   "path",
 	}
 
-	SecretKey = []byte("secret-key")
-
 	u, err := SignTemporary(u, 1*time.Hour)
 	if err != nil {
 		t.Errorf("TemporarySigned() error = %v", err)
@@ -71,8 +69,6 @@ func Test_InValid_HasValidURL_With_SignTemporary(t *testing.T) {
 		Host:   "test.com",
 		Path:   "path",
 	}
-
-	SecretKey = []byte("secret-key")
 
 	u, err := SignTemporary(u, -1*time.Hour)
 	if err != nil {

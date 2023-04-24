@@ -27,7 +27,7 @@ import (
 
 func main(){
 
-	surl.SecretKey = []byte("your-secret-key") //rewrite secret key
+	surl.SetSecretKey([]byte("your-secret-key"))  //rewrite secret key
 
 
 	u := &url.URL{
