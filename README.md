@@ -1,7 +1,6 @@
 # Create signed URLs 
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/i-pva/signed-url/blob/master/LICENSE)
-[![Go Report Card](https://goreportcard.com/badge/github.com/i-pva/signed-url)](https://goreportcard.com/report/github.com/i-pva/signed-url)
 
 This package can create URLs by adding an expiration date and a signature to the URL.
 Signed URLs are especially useful for routes that are publicly accessible yet need a layer of protection against URL manipulation.
